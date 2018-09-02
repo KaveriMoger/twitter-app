@@ -1,0 +1,47 @@
+<div style="margin-left:548px;">
+  <% hidden_field_tag "user", current_user.id%>
+  <% logger.info "gshdghsfh #{current_user.inspect}"%>
+<%= link_to 'New Tweet', new_tweet_path %>
+  </div>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-6" style="border-color: #666666">
+      <% @tweets.each do |tweet| %>
+        <strong><%= tweet.user.email %></strong>
+        <%= tweet.created_at.strftime("%d %b %Y at %I:%M %p") %>
+        <% if current_user.tweets.include?(tweet)%>
+                <p><%= tweet.content%>
+        <%= link_to 'edit', edit_tweet_path(tweet) %>
+        <%= link_to 'Delete', tweet_path(tweet), method: :delete,
+              data: { confirm: 'Are you sure?' } %></p>
+              <% else %>
+              <p><%= tweet.content%></p>
+                      <button type="button" id="follow-button">Follow</button>
+              <% end %>
+
+        <br><br>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+$(document).ready(function() {
+$("#follow-button").click(function(){
+    $.ajax({
+      type: "POST",
+      url: "tweets/follow",
+      data_type :'JSON',
+      data: {
+        id: $("#user").val()
+      },
+      success: function(data) {
+        alert('ok');
+      },
+      error: function(data) {
+        alert('error');
+      }
+    });
+    });
+});
+</script>

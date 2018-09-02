@@ -1,0 +1,15 @@
+
+<h1>All Twitter Users</h1>
+
+<% @users.each do |user| %>
+  <table>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+    </tr>
+    <tr>
+      <td>  <%= user.id %></td>
+      <td>  <%= link_to user.email, "users/#{user.id}" %></td>
+    </tr>
+  </table>
+<% end %>
