@@ -1,5 +1,6 @@
+<% if user_signed_in?%>
 <div style="margin-left:548px;">
-  <% hidden_field_tag "user", current_user.id%>
+  <%= hidden_field_tag :user_id, current_user.id%>
   <% logger.info "gshdghsfh #{current_user.inspect}"%>
 <%= link_to 'New Tweet', new_tweet_path %>
   </div>
@@ -16,7 +17,7 @@
               data: { confirm: 'Are you sure?' } %></p>
               <% else %>
               <p><%= tweet.content%></p>
-                      <button type="button" id="follow-button">Follow</button>
+                      <button type="button" id="follow-button" class="foloow">Follow</button>
               <% end %>
 
         <br><br>
@@ -24,16 +25,27 @@
     </div>
   </div>
 </div>
+<% else %>
+<% redirects_to new_user_session_path%>
+<% end %>
 
 <script>
 $(document).ready(function() {
 $("#follow-button").click(function(){
+  var $this = $(this);
+    $this.toggleClass('foloow');
+    if($this.hasClass('foloow')){
+        $this.text('Follow');         
+    } else {
+        $this.text('Unfollow');
+    }
+  id = $('#user_id').val();
     $.ajax({
       type: "POST",
       url: "tweets/follow",
       data_type :'JSON',
       data: {
-        id: $("#user").val()
+        id: id
       },
       success: function(data) {
         alert('ok');

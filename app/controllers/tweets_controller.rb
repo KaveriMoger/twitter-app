@@ -2,7 +2,7 @@ class TweetsController < ApplicationController
    skip_before_action :verify_authenticity_token  
 
   def index
-    @tweets = Tweet.order('updated_at desc')
+    @tweets = Tweet.all
   
   end
   
@@ -11,8 +11,10 @@ class TweetsController < ApplicationController
   end
 
   def create
-    tweet = Tweet.create(tweet_params)
-    if tweet
+    tweet = Tweet.new(tweet_params)
+    user_id= params[:tweet][:user_id]
+    if tweet.save
+      tweet.update_attribute(:user_id, user_id)
       redirect_to tweets_path
     else
       render 'new'
@@ -28,7 +30,7 @@ class TweetsController < ApplicationController
   end
 
   def follow
-    byebug
+    Relationship.save_follow(params[:id])
   end
   
   def update
